@@ -67,4 +67,4 @@ def predict_next(model, scaler, df, lookback=60):
     pred_price = scaler.inverse_transform(pred)
 
     # Safely cast the NumPy array output to a standard float
-    return float(pred_price)
+    return float(pred_price[0][0])
