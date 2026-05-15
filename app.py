@@ -53,22 +53,23 @@ html, body, [class*="css"] {
     color: #1E293B;
 }
 
-/* FIX 1: Keep Sidebar Expander visible but hide right-side menu */
-/* FIX 1: Keep Sidebar Expander visible but hide right-side menu */
-
-/* FIX 1: Keep Sidebar Expander fully clickable while hiding right-side menus */
+/* FIX 1: Safely hide right-side menus while keeping the sidebar toggle visible */
 header {
+    background-color: transparent !important;
+}
+
+/* Force the sidebar toggle button to always be visible, clickable, and on top */
+[data-testid="collapsedControl"] {
+    display: flex !important;
     visibility: visible !important;
-    background: transparent !important;
+    z-index: 999999 !important;
 }
 
-/* Hide the Deploy Button */
-.stAppDeployButton, [data-testid="stAppDeployButton"] {
-    display: none !important;
-}
-
-/* Hide the Right-side Menu/Toolbar (three dots) */
-[data-testid="stHeaderActionElements"], [data-testid="stToolbar"], #MainMenu {
+/* Hide ONLY the specific right-side buttons (Deploy, GitHub, Menu) safely */
+.stAppDeployButton, 
+[data-testid="stToolbarActions"],
+[data-testid="stBaseButton-header"],
+#MainMenu {
     display: none !important;
 }
 
