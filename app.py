@@ -55,7 +55,11 @@ html, body, [class*="css"] {
 
 /* FIX 1: Keep Sidebar Expander visible but hide right-side menu */
 #MainMenu {visibility: hidden;}
-.stDeployButton {display: none;}
+[data-testid="stToolbar"] {
+    visibility: hidden;
+    height: 0%;
+    position: fixed;
+}
 header {background-color: transparent !important;}
 
 /* Sidebar Styling */
