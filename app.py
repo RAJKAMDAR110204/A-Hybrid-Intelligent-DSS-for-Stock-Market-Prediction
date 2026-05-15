@@ -54,13 +54,18 @@ html, body, [class*="css"] {
 }
 
 /* FIX 1: Keep Sidebar Expander visible but hide right-side menu */
+/* FIX 1: Keep Sidebar Expander visible but hide right-side menu */
+
 #MainMenu {visibility: hidden;}
-[data-testid="stToolbar"] {
-    visibility: hidden;
-    height: 0%;
-    position: fixed;
+[data-testid="stAppDeployButton"] {display: none;}
+[data-testid="stToolbar"] {display: none;}
+header {
+    background-color: transparent !important;
+    pointer-events: none; /* Prevents the invisible header from blocking clicks */
 }
-header {background-color: transparent !important;}
+header * {
+    pointer-events: auto; /* Ensures the sidebar toggle button remains clickable */
+}
 
 /* Sidebar Styling */
 section[data-testid="stSidebar"] {
