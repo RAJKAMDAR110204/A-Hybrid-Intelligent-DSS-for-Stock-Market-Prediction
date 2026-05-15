@@ -18,7 +18,7 @@ from market_data import get_fundamentals
 st.set_page_config(
     layout="wide",
     page_title="SmartInvestor AI",
-    page_icon="ðŸ“ˆ",
+    page_icon="📈",
     initial_sidebar_state="expanded"
 )
 
@@ -206,7 +206,7 @@ for sym in all_symbols:
     mock_price = random.uniform(100, 3000)
     mock_change = random.uniform(-3, 3)
     color_class = "up" if mock_change > 0 else "down"
-    arrow = "â–²" if mock_change > 0 else "â–¼"
+    arrow = "▲" if mock_change > 0 else "▼"
     ticker_items.append(f'<div class="ticker__item">{sym} <span class="{color_class}">{arrow} {mock_price:.2f} ({mock_change:+.2f}%)</span></div>')
 
 # To make the CSS translation loop perfectly, we duplicate the HTML elements inside the flexbox
@@ -280,7 +280,7 @@ if selected_page == "Dashboard":
                 prev_price = float(df['Close'].iloc[-2])
                 change = current_price - prev_price
                 change_percent = (change / prev_price) * 100
-                currency = "â‚¹" if ".NS" in active_search else "$"
+                currency = "₹" if ".NS" in active_search else "$"
                 
                 fundamentals = get_fundamentals(active_search)
                 
@@ -298,7 +298,7 @@ if selected_page == "Dashboard":
     st.markdown("---")
     
     # NIFTY 50 GRID
-    st.markdown("### ðŸ‡®ðŸ‡³ Top Market Movers")
+    st.markdown("### 🇮🇳 Top Market Movers")
     st.caption("Live overview of top constituents")
     
     # Reduced list for visual grid to prevent UI clutter
@@ -311,14 +311,14 @@ if selected_page == "Dashboard":
             with cols[col_idx]:
                 mock_price = random.uniform(100, 4000) 
                 mock_change = random.uniform(-2, 2)
-                currency = "â‚¹" if ".NS" in sym else "$"
+                currency = "₹" if ".NS" in sym else "$"
                 
                 st.markdown(f"""
                 <div style="background-color: white; padding: 15px; border-radius: 10px; border: 1px solid #E2E8F0; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
                     <h5 style="margin:0; color:#1E293B;">{sym.replace('.NS', '')}</h5>
                     <h3 style="margin:5px 0 0 0; color:#0F172A;">{currency}{mock_price:.2f}</h3>
                     <p style="margin:0; color:{'#10B981' if mock_change > 0 else '#EF4444'}; font-weight:600;">
-                        {'â–²' if mock_change > 0 else 'â–¼'} {mock_change:.2f}%
+                        {'▲' if mock_change > 0 else '▼'} {mock_change:.2f}%
                     </p>
                 </div>
                 """, unsafe_allow_html=True)
@@ -344,7 +344,7 @@ elif selected_page == "Compare Stock":
         is_stock2_ns = ".NS" in stock2.upper()
         
         if is_stock1_ns != is_stock2_ns:
-            st.warning("âš ï¸ Incompatible comparison: Cannot compare a US stock with an Indian (NSE) stock. Please select two stocks from the same market.")
+            st.warning("âš ï¸  Incompatible comparison: Cannot compare a US stock with an Indian (NSE) stock. Please select two stocks from the same market.")
         else:
             # --- EXISTING LOGIC ---
             with st.spinner("Fetching comparison data..."):
@@ -380,7 +380,7 @@ elif selected_page == "Predict & News":
         st.markdown("#### Model Settings")
         symbol = st.text_input("Enter Stock Symbol", value="AAPL", key="pred_sym")
         lstm_lookback = st.slider("LSTM Lookback Window", min_value=30, max_value=90, value=60, step=10)
-        analyze_button = st.button("ðŸš€ Analyze Stock", use_container_width=True)
+        analyze_button = st.button("🚀 Analyze Stock", use_container_width=True)
         
     with col_content:
         if analyze_button:
@@ -389,7 +389,7 @@ elif selected_page == "Predict & News":
                 if df.empty:
                     st.error("Invalid stock symbol.")
                 else:
-                    currency = "â‚¹" if ".NS" in symbol else "$"
+                    currency = "₹" if ".NS" in symbol else "$"
                     
                     # Core ML Logic
                     model, acc = get_trained_model(df)
@@ -418,19 +418,19 @@ elif selected_page == "Predict & News":
                     st.markdown("### Prediction Results")
                     p1, p2, p3, p4 = st.columns(4)
                     p1.metric("Current Price", f"{currency}{current_price:.2f}")
-                    p2.metric("AI Prediction", "UP ðŸ“ˆ" if prediction == 1 else "DOWN ðŸ“‰")
+                    p2.metric("AI Prediction", "UP 📈" if prediction == 1 else "DOWN 📉")
                     p3.metric("Confidence", f"{confidence:.2f}%")
                     p4.metric("Risk Level", risk)
                     
                     strength = "Strong" if confidence > 75 else "Moderate" if confidence > 60 else "Weak"
                     st.success(f"**Final AI Recommendation:** {decision} ({strength})")
                     
-                    st.markdown("### ðŸ“Š Model Performance")
+                    st.markdown("### 📊 Model Performance")
                     acc_col1, acc_col2 = st.columns(2)
                     acc_col1.metric("Training Accuracy", f"{acc*100:.2f}%")
                     acc_col2.metric("Backtest Accuracy", f"{bt_acc*100:.2f}%")
                     
-                    st.markdown("### ðŸ§  Market Sentiment")
+                    st.markdown("### 🧠  Market Sentiment")
                     sentiment_progress = min(max((sentiment_score + 1) / 2, 0), 1)
                     st.progress(sentiment_progress)
                     st.caption(f"Sentiment Score: {round(sentiment_score, 2)}")
@@ -453,7 +453,7 @@ elif selected_page == "Predict & News":
                     buffer = BytesIO()
                     generate_report(buffer, report_data)
                     buffer.seek(0)
-                    st.download_button("ðŸ“¥ Download Analysis Report", data=buffer, file_name=f"{symbol}_Report.pdf", mime="application/pdf")
+                    st.download_button("📥 Download Analysis Report", data=buffer, file_name=f"{symbol}_Report.pdf", mime="application/pdf")
 
 # ---------------- PAGE 4: CHARTS ----------------
 elif selected_page == "Charts":
@@ -492,4 +492,3 @@ elif selected_page == "Charts":
                     st.plotly_chart(fig, use_container_width=True)
                 else:
                     st.error("No chart data available for this ticker.")
-
