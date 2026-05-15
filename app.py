@@ -344,7 +344,7 @@ elif selected_page == "Compare Stock":
         is_stock2_ns = ".NS" in stock2.upper()
         
         if is_stock1_ns != is_stock2_ns:
-            st.warning("âš ï¸  Incompatible comparison: Cannot compare a US stock with an Indian (NSE) stock. Please select two stocks from the same market.")
+            st.warning("!Incompatible comparison: Cannot compare a US stock with an Indian (NSE) stock. Please select two stocks from the same market.")
         else:
             # --- EXISTING LOGIC ---
             with st.spinner("Fetching comparison data..."):
