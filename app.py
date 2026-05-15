@@ -396,7 +396,7 @@ elif selected_page == "Predict & News":
                     bt_acc = backtest_model(model, df)
                     
                     latest = df[['Return', 'MA5', 'MA10', 'RSI']].iloc[-1:]
-                    prediction = int(model.predict(latest))
+                    prediction = int(model.predict(latest)[0])
                     confidence = float(model.predict_proba(latest).max()) * 100
                     
                     clean_symbol = symbol.replace(".NS", "")
