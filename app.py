@@ -56,15 +56,20 @@ html, body, [class*="css"] {
 /* FIX 1: Keep Sidebar Expander visible but hide right-side menu */
 /* FIX 1: Keep Sidebar Expander visible but hide right-side menu */
 
-#MainMenu {visibility: hidden;}
-[data-testid="stAppDeployButton"] {display: none;}
-[data-testid="stToolbar"] {display: none;}
+/* FIX 1: Keep Sidebar Expander fully clickable while hiding right-side menus */
 header {
-    background-color: transparent !important;
-    pointer-events: none; /* Prevents the invisible header from blocking clicks */
+    visibility: visible !important;
+    background: transparent !important;
 }
-header * {
-    pointer-events: auto; /* Ensures the sidebar toggle button remains clickable */
+
+/* Hide the Deploy Button */
+.stAppDeployButton, [data-testid="stAppDeployButton"] {
+    display: none !important;
+}
+
+/* Hide the Right-side Menu/Toolbar (three dots) */
+[data-testid="stHeaderActionElements"], [data-testid="stToolbar"], #MainMenu {
+    display: none !important;
 }
 
 /* Sidebar Styling */
