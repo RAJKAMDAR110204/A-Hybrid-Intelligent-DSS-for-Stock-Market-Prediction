@@ -429,16 +429,18 @@ elif selected_page == "Predict & News":
                     st.success(f"**Final AI Recommendation:** {decision} ({strength})")
                     
                     # --- RESTORED FUTURE PRICE PREDICTION BLOCK (Moved above Market Sentiment) ---
+                    # --- RESTORED FUTURE PRICE PREDICTION BLOCK (Moved above Market Sentiment) ---
                     st.markdown("### 🔮 Future Price Prediction")
                     if future_price:
                         change_pred = future_price - current_price
                         change_percent_pred = (change_pred / current_price) * 100
-                        arrow_pred = "📈" if change_pred > 0 else "📉"
                         
+                        # Native Streamlit metrics automatically format colors based on the numerical sign (+/-)
                         st.metric(
-                            "Predicted Target Price",
-                            f"{currency}{future_price:.2f}",
-                            f"{arrow_pred} {change_pred:+.2f} ({change_percent_pred:+.2f}%)"
+                            label="Predicted Target Price",
+                            value=f"{currency}{future_price:.2f}",
+                            delta=f"{change_pred:+.2f} ({change_percent_pred:+.2f}%)",
+                            delta_color="normal"
                         )
                     else:
                         st.warning("Insufficient historical data for future price prediction.")
