@@ -422,12 +422,12 @@ elif selected_page == "Predict & News":
                     p1, p2, p3, p4 = st.columns(4)
                     p1.metric("Current Price", f"{currency}{current_price:.2f}")
                     # Sync the metric display explicitly with the output of the decision engine
-if "BUY" in decision.upper():
-    pred_label = "UP 📈"
-elif "SELL" in decision.upper():
-    pred_label = "DOWN 📉"
-else:
-    pred_label = "HOLD ↔️"
+                    if "BUY" in decision.upper():
+                        pred_label = "UP 📈"
+                    elif "SELL" in decision.upper():
+                        pred_label = "DOWN 📉"
+                    else:
+                        pred_label = "HOLD ↔️"
 
 p2.metric("AI Prediction", pred_label)
                     p3.metric("Confidence", f"{confidence:.2f}%")
