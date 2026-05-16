@@ -203,7 +203,6 @@ def get_news_cached(symbol):
     return get_news(symbol)
 
 # ---------------- TOP NAV TICKER TAPE ----------------
-# NIFTY 50 + Tech Giants list for infinite loop
 all_symbols = [
     "RELIANCE", "TCS", "HDFCBANK", "INFY", "ICICIBANK", "HUL", "SBI", "BHARTIARTL", "ITC", "KOTAKBANK", 
     "L&T", "AXISBANK", "ASIANPAINT", "BAJFINANCE", "MARUTI", "SUNPHARMA", "WIPRO", "HCLTECH", "TATAMOTORS", 
@@ -213,14 +212,12 @@ all_symbols = [
 
 ticker_items = []
 for sym in all_symbols:
-    # Using mock data for the UI ticker to avoid freezing the app on load
     mock_price = random.uniform(100, 3000)
     mock_change = random.uniform(-3, 3)
     color_class = "up" if mock_change > 0 else "down"
     arrow = "▲" if mock_change > 0 else "▼"
     ticker_items.append(f'<div class="ticker__item">{sym} <span class="{color_class}">{arrow} {mock_price:.2f} ({mock_change:+.2f}%)</span></div>')
 
-# To make the CSS translation loop perfectly, we duplicate the HTML elements inside the flexbox
 inner_html = "".join(ticker_items) * 2 
 
 ticker_html = f"""
@@ -258,7 +255,6 @@ if selected_page == "Dashboard":
     # MAIN SEARCH
     col1, col2 = st.columns([3, 1])
     with col1:
-        # FIX 2: Using on_change callback ensures state updates instantly
         st.text_input(
             "What do you want to find?", 
             value=st.session_state.dash_search_val, 
@@ -267,9 +263,9 @@ if selected_page == "Dashboard":
             on_change=handle_search_update
         )
     
-    # RECENT SEARCHES (Rendered AFTER state update)
+    # RECENT SEARCHES
     st.markdown("##### Recently Searched")
-    recent_cols = st.columns(6) # Show up to 6
+    recent_cols = st.columns(6)
     for idx, recent_sym in enumerate(st.session_state.recent_searches):
         with recent_cols[idx]:
             if st.button(recent_sym, key=f"recent_btn_{idx}", use_container_width=True):
@@ -312,7 +308,6 @@ if selected_page == "Dashboard":
     st.markdown("### 🇮🇳 Top Market Movers")
     st.caption("Live overview of top constituents")
     
-    # Reduced list for visual grid to prevent UI clutter
     grid_symbols = ["RELIANCE.NS", "TCS.NS", "HDFCBANK.NS", "INFY.NS", "ICICIBANK.NS", "HUL.NS", "SBI.NS", "BHARTIARTL.NS", "ITC.NS", "AAPL", "MSFT", "GOOGL"]
     
     with st.container(height=400): 
@@ -334,7 +329,6 @@ if selected_page == "Dashboard":
                 </div>
                 """, unsafe_allow_html=True)
 
-
 # ---------------- PAGE 2: COMPARE STOCK ----------------
 elif selected_page == "Compare Stock":
     st.title("Search Stocks to Compare")
@@ -350,14 +344,12 @@ elif selected_page == "Compare Stock":
         compare_btn = st.button("Compare Now", use_container_width=True)
         
     if compare_btn and stock1 and stock2:
-        # --- NEW COMPATIBILITY CHECK ---
         is_stock1_ns = ".NS" in stock1.upper()
         is_stock2_ns = ".NS" in stock2.upper()
         
         if is_stock1_ns != is_stock2_ns:
             st.warning("!Incompatible comparison: Cannot compare a US stock with an Indian (NSE) stock. Please select two stocks from the same market.")
         else:
-            # --- EXISTING LOGIC ---
             with st.spinner("Fetching comparison data..."):
                 df1 = get_stock_data(stock1)
                 df2 = get_stock_data(stock2)
@@ -435,6 +427,21 @@ elif selected_page == "Predict & News":
                     
                     strength = "Strong" if confidence > 75 else "Moderate" if confidence > 60 else "Weak"
                     st.success(f"**Final AI Recommendation:** {decision} ({strength})")
+                    
+                    # --- RESTORED FUTURE PRICE PREDICTION BLOCK (Moved above Market Sentiment) ---
+                    st.markdown("### 🔮 Future Price Prediction")
+                    if future_price:
+                        change_pred = future_price - current_price
+                        change_percent_pred = (change_pred / current_price) * 100
+                        arrow_pred = "📈" if change_pred > 0 else "📉"
+                        
+                        st.metric(
+                            "Predicted Target Price",
+                            f"{currency}{future_price:.2f}",
+                            f"{arrow_pred} {change_pred:+.2f} ({change_percent_pred:+.2f}%)"
+                        )
+                    else:
+                        st.warning("Insufficient historical data for future price prediction.")
                     
                     st.markdown("### 📊 Model Performance")
                     acc_col1, acc_col2 = st.columns(2)
