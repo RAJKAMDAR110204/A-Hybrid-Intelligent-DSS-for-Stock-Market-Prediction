@@ -53,23 +53,19 @@ html, body, [class*="css"] {
     color: #1E293B;
 }
 
-/* FIX 1: Safely hide right-side menus while keeping the sidebar toggle visible */
+/* FIX 1: Keep Sidebar Expander fully clickable while hiding right-side menus */
 header {
-    background-color: transparent !important;
-}
-
-/* Force the sidebar toggle button to always be visible, clickable, and on top */
-[data-testid="collapsedControl"] {
-    display: flex !important;
     visibility: visible !important;
-    z-index: 999999 !important;
+    background: transparent !important;
 }
 
-/* Hide ONLY the specific right-side buttons (Deploy, GitHub, Menu) safely */
-.stAppDeployButton, 
-[data-testid="stToolbarActions"],
-[data-testid="stBaseButton-header"],
-#MainMenu {
+/* Hide the Deploy Button */
+.stAppDeployButton, [data-testid="stAppDeployButton"] {
+    display: none !important;
+}
+
+/* Hide the Right-side Menu/Toolbar (three dots) */
+[data-testid="stHeaderActionElements"], [data-testid="stToolbar"], #MainMenu {
     display: none !important;
 }
 
@@ -348,7 +344,7 @@ elif selected_page == "Compare Stock":
         is_stock2_ns = ".NS" in stock2.upper()
         
         if is_stock1_ns != is_stock2_ns:
-            st.warning("!Incompatible comparison: Cannot compare a US stock with an Indian (NSE) stock. Please select two stocks from the same market.")
+            st.warning("⚠️ Incompatible comparison: Cannot compare a US stock with an Indian (NSE) stock. Please select two stocks from the same market.")
         else:
             with st.spinner("Fetching comparison data..."):
                 df1 = get_stock_data(stock1)
@@ -421,6 +417,7 @@ elif selected_page == "Predict & News":
                     st.markdown("### Prediction Results")
                     p1, p2, p3, p4 = st.columns(4)
                     p1.metric("Current Price", f"{currency}{current_price:.2f}")
+                    
                     # Sync the metric display explicitly with the output of the decision engine
                     if "BUY" in decision.upper():
                         pred_label = "UP 📈"
@@ -429,15 +426,14 @@ elif selected_page == "Predict & News":
                     else:
                         pred_label = "HOLD ↔️"
 
-p2.metric("AI Prediction", pred_label)
+                    p2.metric("AI Prediction", pred_label)
                     p3.metric("Confidence", f"{confidence:.2f}%")
                     p4.metric("Risk Level", risk)
                     
                     strength = "Strong" if confidence > 75 else "Moderate" if confidence > 60 else "Weak"
                     st.success(f"**Final AI Recommendation:** {decision} ({strength})")
                     
-                    # --- RESTORED FUTURE PRICE PREDICTION BLOCK (Moved above Market Sentiment) ---
-                    # --- RESTORED FUTURE PRICE PREDICTION BLOCK (Moved above Market Sentiment) ---
+                    # --- RESTORED FUTURE PRICE PREDICTION BLOCK ---
                     st.markdown("### 🔮 Future Price Prediction")
                     if future_price:
                         change_pred = future_price - current_price
@@ -458,7 +454,7 @@ p2.metric("AI Prediction", pred_label)
                     acc_col1.metric("Training Accuracy", f"{acc*100:.2f}%")
                     acc_col2.metric("Backtest Accuracy", f"{bt_acc*100:.2f}%")
                     
-                    st.markdown("### 🧠  Market Sentiment")
+                    st.markdown("### 🧠 Market Sentiment")
                     sentiment_progress = min(max((sentiment_score + 1) / 2, 0), 1)
                     st.progress(sentiment_progress)
                     st.caption(f"Sentiment Score: {round(sentiment_score, 2)}")
