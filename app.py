@@ -1,3 +1,4 @@
+
 import streamlit as st
 from streamlit_option_menu import option_menu
 import pandas as pd
@@ -59,13 +60,21 @@ header {
     background: transparent !important;
 }
 
-/* Hide the Deploy Button */
-.stAppDeployButton, [data-testid="stAppDeployButton"] {
-    display: none !important;
+/* Force the sidebar toggle button to always be visible (Supports Old & New Streamlit Versions) */
+[data-testid="collapsedControl"],
+[data-testid="stSidebarCollapsedControl"] {
+    display: flex !important;
+    visibility: visible !important;
+    z-index: 999999 !important;
 }
 
-/* Hide the Right-side Menu/Toolbar (three dots) */
-[data-testid="stHeaderActionElements"], [data-testid="stToolbar"], #MainMenu {
+/* Hide ONLY the specific right-side buttons safely */
+.stAppDeployButton, 
+[data-testid="stAppDeployButton"],
+[data-testid="stToolbarActions"],
+[data-testid="stHeaderActionElements"],
+[data-testid="stBaseButton-header"],
+#MainMenu {
     display: none !important;
 }
 
@@ -516,3 +525,7 @@ elif selected_page == "Charts":
                     st.plotly_chart(fig, use_container_width=True)
                 else:
                     st.error("No chart data available for this ticker.")
+
+
+
+
