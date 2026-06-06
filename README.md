@@ -1,3 +1,5 @@
+https://a-hybrid-intelligent-dss-for-stock-market-prediction-demovosbv.streamlit.app/
+
 # SmartInvestor AI - Stock Analysis Platform
 
 An advanced AI-powered financial intelligence platform for stock analysis and recommendations.
